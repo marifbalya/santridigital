@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Status Darah Haid Menurut Fiqih</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f3f0;
+        }
+        
+        h1, h2, h3 {
+            color: #6d4c41;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #d7ccc8;
+            padding-bottom: 10px;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d7ccc8;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #8d6e63;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #6d4c41;
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #efebe9;
+            border-radius: 8px;
+            border-left: 5px solid #8d6e63;
+        }
+        
+        .result h2 {
+            margin-top: 0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .blood-days {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .day-box {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #d7ccc8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .day-box.selected {
+            background-color: #d7ccc8;
+        }
+        
+        .day-box.haid {
+            background-color: #ffcdd2;
+        }
+        
+        .day-box.istihadah {
+            background-color: #c8e6c9;
+        }
+        
+        .day-box.nifas {
+            background-color: #bbdefb;
+        }
+        
+        .day-box.suci {
+            background-color: #f5f5f5;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #d7ccc8;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #d7ccc8;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid #8d6e63;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .blood-days {
+                gap: 5px;
+            }
+            
+            .day-box {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Analisa Darah Haid Madzhab Syafi'i</h1>
+    
+    <div class="container">
+        <div class="tab-container">
+            <div class="tab active" data-tab="basic">Informasi Dasar</div>
+            <div class="tab" data-tab="details">Detail Darah</div>
+            <div class="tab" data-tab="result">Hasil Analisis</div>
+        </div>
+        
+        <div id="basic-tab" class="tab-content">
+            <div class="form-group">
+                <label for="case-type">Jenis Kasus:</label>
+                <select id="case-type">
+                    <option value="">Pilih jenis kasus</option>
+                    <option value="haid">Haid Biasa</option>
+                    <option value="nifas">Nifas</option>
+                    <option value="istihadhah">Istihadhah</option>
+                </select>
+            </div>
+            
+            <div id="haid-details">
+                <div class="form-group">
+                    <label for="woman-status">Status Wanita:</label>
+                    <select id="woman-status">
+                        <option value="">Pilih status wanita</option>
+                        <option value="mubtadiah">Mubtadi'ah (Baru pertama kali haid)</option>
+                        <option value="mutadah">Mu'tadah (Sudah pernah haid sebelumnya)</option>
+                    </select>
+                </div>
+                
+                <div id="mutadah-type-group" class="form-group hidden">
+                    <label for="mutadah-type">Jenis Mu'tadah:</label>
+                    <select id="mutadah-type">
+                        <option value="">Pilih jenis mu'tadah</option>
+                        <option value="mumayyizah">Mumayyizah (Bisa membedakan darah kuat/lemah)</option>
+                        <option value="mutahayyiroh">Mutahayyiroh (Tidak ingat kebiasaan haidnya)</option>
+                    </select>
+                </div>
+                
+                <div id="blood-type-group" class="form-group hidden">
+                    <label for="blood-type">Jenis Keluarnya Darah:</label>
+                    <select id="blood-type">
+                        <option value="">Pilih jenis keluarnya darah</option>
+                        <option value="continuous">Keluar terus menerus</option>
+                        <option value="intermittent">Keluar terputus-putus</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="days-count">Berapa hari darah keluar?</label>
+                <input type="number" id="days-count" min="1" max="60" placeholder="Masukkan jumlah hari">
+                <div id="days-count-error" class="error hidden"></div>
+            </div>
+            
+            <button id="next-to-details">Lanjut ke Detail Darah</button>
+        </div>
+        
+        <div id="details-tab" class="tab-content hidden">
+            <div id="nifas-details" class="hidden">
+                <div class="form-group">
+                    <label>Apakah pernah melahirkan sebelumnya?</label>
+                    <select id="previous-nifas">
+                        <option value="no">Tidak, ini pertama kali</option>
+                        <option value="yes">Ya, sudah pernah</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="istihadhah-details" class="hidden">
+                <div class="form-group">
+                    <label>Pola Darah Selama 3 Bulan Terakhir:</label>
+                    <input type="text" id="three-month-pattern" 
+                           placeholder="Contoh: 7,23,7,23 (7 hari darah, 23 suci)">
+                </div>
+            </div>
+            
+            <div id="haid-blood-details">
+                <div id="continuous-blood-group" class="hidden">
+                    <div class="form-group">
+                        <label>Warna dan sifat darah yang dominan:</label>
+                        <select id="blood-color">
+                            <option value="">Pilih warna darah</option>
+                            <option value="black">Hitam</option>
+                            <option value="red">Merah</option>
+                            <option value="red-yellow">Merah kekuningan</option>
+                            <option value="yellow">Kuning</option>
+                            <option value="cloudy">Keruh</option>
+                            <option value="unknown">Tidak ingat/tidak tahu</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Sifat darah:</label>
+                        <div>
+                            <input type="checkbox" id="thick" value="thick">
+                            <label for="thick" style="display: inline;">Kental</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="smelly" value="smelly">
+                            <label for="smelly" style="display: inline;">Bau anyir/busuk</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="intermittent-blood-group" class="hidden">
+                    <div class="form-group">
+                        <label>Masukkan pola darah keluar:</label>
+                        <p>Contoh: 3 hari darah, 2 hari tidak, 5 hari darah lagi → Tulis: 3,2,5</p>
+                        <input type="text" id="blood-pattern" placeholder="Misal: 4,7,10 (4 hari darah, 7 hari tidak, 10 hari darah)">
+                        <div id="blood-pattern-error" class="error hidden"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Warna dan sifat darah saat keluar:</label>
+                        <select id="intermittent-blood-color">
+                            <option value="">Pilih warna darah</option>
+                            <option value="black">Hitam</option>
+                            <option value="red">Merah</option>
+                            <option value="red-yellow">Merah kekuningan</option>
+                            <option value="yellow">Kuning</option>
+                            <option value="cloudy">Keruh</option>
+                            <option value="unknown">Tidak ingat/tidak tahu</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Sifat darah saat keluar:</label>
+                        <div>
+                            <input type="checkbox" id="intermittent-thick" value="thick">
+                            <label for="intermittent-thick" style="display: inline;">Kental</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="intermittent-smelly" value="smelly">
+                            <label for="intermittent-smelly" style="display: inline;">Bau anyir/busuk</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="mumayyizah-details" class="hidden">
+                    <div class="form-group">
+                        <label>Apakah darah memiliki dua jenis (kuat dan lemah)?</label>
+                        <select id="has-two-types">
+                            <option value="no">Tidak, darah sama semua</option>
+                            <option value="yes">Ya, ada darah kuat dan lemah</option>
+                        </select>
+                    </div>
+                    
+                    <div id="two-types-details" class="hidden">
+                        <div class="form-group">
+                            <label>Berapa hari darah kuat keluar?</label>
+                            <input type="number" id="strong-days" min="1" placeholder="Jumlah hari darah kuat">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Warna dan sifat darah kuat:</label>
+                            <select id="strong-blood-color">
+                                <option value="">Pilih warna darah kuat</option>
+                                <option value="black">Hitam</option>
+                                <option value="red">Merah</option>
+                                <option value="red-yellow">Merah kekuningan</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Sifat darah kuat:</label>
+                            <div>
+                                <input type="checkbox" id="strong-thick" value="thick" checked>
+                                <label for="strong-thick" style="display: inline;">Kental</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="strong-smelly" value="smelly" checked>
+                                <label for="strong-smelly" style="display: inline;">Bau anyir/busuk</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Warna dan sifat darah lemah:</label>
+                            <select id="weak-blood-color">
+                                <option value="">Pilih warna darah lemah</option>
+                                <option value="yellow">Kuning</option>
+                                <option value="cloudy">Keruh</option>
+                                <option value="red-yellow">Merah kekuningan</option>
+                                <option value="red">Merah (lebih muda)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Sifat darah lemah:</label>
+                            <div>
+                                <input type="checkbox" id="weak-thick" value="thick">
+                                <label for="weak-thick" style="display: inline;">Kental</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="weak-smelly" value="smelly">
+                                <label for="weak-smelly" style="display: inline;">Bau anyir/busuk</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="mutahayyiroh-details" class="hidden">
+                    <div class="form-group">
+                        <label>Apakah Anda ingat kebiasaan haid sebelumnya?</label>
+                        <select id="remember-habit">
+                            <option value="no">Tidak ingat sama sekali</option>
+                            <option value="partial">Ingat sebagian</option>
+                        </select>
+                    </div>
+                    
+                    <div id="partial-habit-details" class="hidden">
+                        <div class="form-group">
+                            <label>Berapa hari biasanya haid berlangsung?</label>
+                            <input type="number" id="habit-days" min="1" max="15" placeholder="Misal: 6 atau 7">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Berapa hari biasanya masa suci?</label>
+                            <input type="number" id="habit-clean-days" min="15" placeholder="Misal: 23 atau 24">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="analyze-button">Analisis Status Darah</button>
+            <button id="back-to-basic">Kembali ke Informasi Dasar</button>
+        </div>
+        
+        <div id="result-tab" class="tab-content hidden">
+            <div id="analysis-result" class="result">
+                <h2>Hasil Analisis Status Darah</h2>
+                <div id="result-content"></div>
+                
+                <div id="blood-visualization" class="hidden">
+                    <h3>Visualisasi Hari Darah</h3>
+                    <div class="blood-days" id="blood-days-container"></div>
+                    
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color haid"></div>
+                            <span>Haid</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color istihadah"></div>
+                            <span>Istihadah</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color nifas"></div>
+                            <span>Nifas</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color suci"></div>
+                            <span>Suci</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="nifas-result" class="hidden">
+                    <h3>Hukum Nifas</h3>
+                    <p>Maksimal masa nifas adalah 60 hari. Darah setelah 60 hari dihukumi istihadhah</p>
+                </div>
+                
+                <div id="prayer-obligation" class="hidden">
+                    <h3>Kewajiban Shalat dan Puasa</h3>
+                    <div id="prayer-content"></div>
+                </div>
+                
+                <div id="prohibitions" class="hidden">
+                    <h3>Haram dan Halal</h3>
+                    <div id="prohibitions-content"></div>
+                </div>
+            </div>
+            
+            <button id="new-analysis">Analisis Baru</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab navigation
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    
+                    // Show the corresponding tab content
+                    const tabId = this.getAttribute('data-tab') + '-tab';
+                    document.getElementById(tabId).classList.remove('hidden');
+                });
+            });
+            
+            // Form navigation and logic
+            const caseType = document.getElementById('case-type');
+            const womanStatus = document.getElementById('woman-status');
+            const mutadahTypeGroup = document.getElementById('mutadah-type-group');
+            const bloodTypeGroup = document.getElementById('blood-type-group');
+            const nextToDetailsBtn = document.getElementById('next-to-details');
+            const backToBasicBtn = document.getElementById('back-to-basic');
+            const analyzeBtn = document.getElementById('analyze-button');
+            const newAnalysisBtn = document.getElementById('new-analysis');
+            
+            // Case type change handler
+            caseType.addEventListener('change', function() {
+                const selectedCase = this.value;
+                
+                // Hide all case-specific sections
+                document.getElementById('haid-details').classList.add('hidden');
+                document.getElementById('nifas-details').classList.add('hidden');
+                document.getElementById('istihadhah-details').classList.add('hidden');
+                document.getElementById('haid-blood-details').classList.add('hidden');
+                
+                // Show relevant sections based on case type
+                if (selectedCase === 'haid') {
+                    document.getElementById('haid-details').classList.remove('hidden');
+                    document.getElementById('haid-blood-details').classList.remove('hidden');
+                } else if (selectedCase === 'nifas') {
+                    document.getElementById('nifas-details').classList.remove('hidden');
+                } else if (selectedCase === 'istihadhah') {
+                    document.getElementById('istihadhah-details').classList.remove('hidden');
+                    document.getElementById('haid-blood-details').classList.remove('hidden');
+                }
+            });
+            
+            // Show/hide sections based on selections
+            womanStatus.addEventListener('change', function() {
+                if (this.value === 'mutadah') {
+                    mutadahTypeGroup.classList.remove('hidden');
+                } else {
+                    mutadahTypeGroup.classList.add('hidden');
+                    document.getElementById('mutadah-type').value = '';
+                    document.getElementById('mumayyizah-details').classList.add('hidden');
+                    document.getElementById('mutahayyiroh-details').classList.add('hidden');
+                }
+                
+                if (this.value !== '') {
+                    bloodTypeGroup.classList.remove('hidden');
+                } else {
+                    bloodTypeGroup.classList.add('hidden');
+                    document.getElementById('blood-type').value = '';
+                }
+            });
+            
+            document.getElementById('mutadah-type').addEventListener('change', function() {
+                if (this.value === 'mumayyizah') {
+                    document.getElementById('mumayyizah-details').classList.remove('hidden');
+                    document.getElementById('mutahayyiroh-details').classList.add('hidden');
+                } else if (this.value === 'mutahayyiroh') {
+                    document.getElementById('mutahayyiroh-details').classList.remove('hidden');
+                    document.getElementById('mumayyizah-details').classList.add('hidden');
+                } else {
+                    document.getElementById('mumayyizah-details').classList.add('hidden');
+                    document.getElementById('mutahayyiroh-details').classList.add('hidden');
+                }
+            });
+            
+            document.getElementById('blood-type').addEventListener('change', function() {
+                if (this.value === 'continuous') {
+                    document.getElementById('continuous-blood-group').classList.remove('hidden');
+                    document.getElementById('intermittent-blood-group').classList.add('hidden');
+                } else if (this.value === 'intermittent') {
+                    document.getElementById('intermittent-blood-group').classList.remove('hidden');
+                    document.getElementById('continuous-blood-group').classList.add('hidden');
+                } else {
+                    document.getElementById('continuous-blood-group').classList.add('hidden');
+                    document.getElementById('intermittent-blood-group').classList.add('hidden');
+                }
+            });
+            
+            document.getElementById('has-two-types').addEventListener('change', function() {
+                if (this.value === 'yes') {
+                    document.getElementById('two-types-details').classList.remove('hidden');
+                } else {
+                    document.getElementById('two-types-details').classList.add('hidden');
+                }
+            });
+            
+            document.getElementById('remember-habit').addEventListener('change', function() {
+                if (this.value === 'partial') {
+                    document.getElementById('partial-habit-details').classList.remove('hidden');
+                } else {
+                    document.getElementById('partial-habit-details').classList.add('hidden');
+                }
+            });
+            
+            // Navigation buttons
+            nextToDetailsBtn.addEventListener('click', function() {
+                const selectedCase = document.getElementById('case-type').value;
+                
+                if (selectedCase === '') {
+                    alert('Pilih jenis kasus terlebih dahulu');
+                    return;
+                }
+                
+                // Validate based on case type
+                if (selectedCase === 'haid' || selectedCase === 'istihadhah') {
+                    if (womanStatus.value === '') {
+                        alert('Pilih status wanita terlebih dahulu');
+                        return;
+                    }
+                    
+                    if (womanStatus.value === 'mutadah' && document.getElementById('mutadah-type').value === '') {
+                        alert('Pilih jenis mu\'tadah terlebih dahulu');
+                        return;
+                    }
+                    
+                    if (document.getElementById('blood-type').value === '') {
+                        alert('Pilih jenis keluarnya darah terlebih dahulu');
+                        return;
+                    }
+                }
+                
+                const daysCount = parseInt(document.getElementById('days-count').value);
+                if (isNaN(daysCount) || daysCount < 1) {
+                    document.getElementById('days-count-error').textContent = 'Masukkan jumlah hari yang valid (minimal 1 hari)';
+                    document.getElementById('days-count-error').classList.remove('hidden');
+                    return;
+                } else {
+                    document.getElementById('days-count-error').classList.add('hidden');
+                }
+                
+                // Go to details tab
+                document.querySelector('.tab[data-tab="details"]').click();
+            });
+            
+            backToBasicBtn.addEventListener('click', function() {
+                document.querySelector('.tab[data-tab="basic"]').click();
+            });
+            
+            newAnalysisBtn.addEventListener('click', function() {
+                // Reset form
+                document.getElementById('case-type').value = '';
+                document.getElementById('woman-status').value = '';
+                document.getElementById('mutadah-type').value = '';
+                document.getElementById('blood-type').value = '';
+                document.getElementById('days-count').value = '';
+                document.getElementById('blood-color').value = '';
+                document.getElementById('thick').checked = false;
+                document.getElementById('smelly').checked = false;
+                document.getElementById('blood-pattern').value = '';
+                document.getElementById('intermittent-blood-color').value = '';
+                document.getElementById('intermittent-thick').checked = false;
+                document.getElementById('intermittent-smelly').checked = false;
+                document.getElementById('has-two-types').value = 'no';
+                document.getElementById('strong-days').value = '';
+                document.getElementById('strong-blood-color').value = '';
+                document.getElementById('strong-thick').checked = true;
+                document.getElementById('strong-smelly').checked = true;
+                document.getElementById('weak-blood-color').value = '';
+                document.getElementById('weak-thick').checked = false;
+                document.getElementById('weak-smelly').checked = false;
+                document.getElementById('remember-habit').value = 'no';
+                document.getElementById('habit-days').value = '';
+                document.getElementById('habit-clean-days').value = '';
+                document.getElementById('previous-nifas').value = 'no';
+                document.getElementById('three-month-pattern').value = '';
+                
+                // Hide all conditional sections
+                document.getElementById('haid-details').classList.add('hidden');
+                document.getElementById('nifas-details').classList.add('hidden');
+                document.getElementById('istihadhah-details').classList.add('hidden');
+                document.getElementById('haid-blood-details').classList.add('hidden');
+                mutadahTypeGroup.classList.add('hidden');
+                bloodTypeGroup.classList.add('hidden');
+                document.getElementById('continuous-blood-group').classList.add('hidden');
+                document.getElementById('intermittent-blood-group').classList.add('hidden');
+                document.getElementById('mumayyizah-details').classList.add('hidden');
+                document.getElementById('two-types-details').classList.add('hidden');
+                document.getElementById('mutahayyiroh-details').classList.add('hidden');
+                document.getElementById('partial-habit-details').classList.add('hidden');
+                
+                // Reset errors
+                document.getElementById('days-count-error').classList.add('hidden');
+                document.getElementById('blood-pattern-error').classList.add('hidden');
+                
+                // Hide result sections
+                document.getElementById('nifas-result').classList.add('hidden');
+                document.getElementById('blood-visualization').classList.add('hidden');
+                document.getElementById('prayer-obligation').classList.add('hidden');
+                document.getElementById('prohibitions').classList.add('hidden');
+                
+                // Go to basic tab
+                document.querySelector('.tab[data-tab="basic"]').click();
+            });
+            
+            // Analysis function
+            analyzeBtn.addEventListener('click', function() {
+                // Get all form values
+                const caseTypeVal = document.getElementById('case-type').value;
+                const womanStatusVal = document.getElementById('woman-status').value;
+                const mutadahTypeVal = document.getElementById('mutadah-type').value;
+                const bloodTypeVal = document.getElementById('blood-type').value;
+                const daysCount = parseInt(document.getElementById('days-count').value);
+                
+                // Validate based on case type
+                if (caseTypeVal === 'haid' || caseTypeVal === 'istihadhah') {
+                    if (bloodTypeVal === 'continuous') {
+                        if (document.getElementById('blood-color').value === '') {
+                            alert('Pilih warna darah terlebih dahulu');
+                            return;
+                        }
+                    } else if (bloodTypeVal === 'intermittent') {
+                        const patternInput = document.getElementById('blood-pattern').value;
+                        
+                        if (patternInput === '') {
+                            document.getElementById('blood-pattern-error').textContent = 'Masukkan pola darah terlebih dahulu';
+                            document.getElementById('blood-pattern-error').classList.remove('hidden');
+                            return;
+                        }
+                        
+                        if (!patternInput.match(/^(\d+)(,\d+)*$/)) {
+                            document.getElementById('blood-pattern-error').textContent = 'Format pola tidak valid. Gunakan angka dipisahkan koma (contoh: 3,2,5)';
+                            document.getElementById('blood-pattern-error').classList.remove('hidden');
+                            return;
+                        }
+                        
+                        const patternDays = patternInput.split(',').map(num => parseInt(num.trim()));
+                        const totalPatternDays = patternDays.reduce((a, b) => a + b, 0);
+                        
+                        if (totalPatternDays !== daysCount) {
+                            document.getElementById('blood-pattern-error').textContent = 'Total hari dalam pola (' + totalPatternDays + ') tidak sesuai dengan jumlah hari yang dimasukkan sebelumnya (' + daysCount + ')';
+                            document.getElementById('blood-pattern-error').classList.remove('hidden');
+                            return;
+                        }
+                        
+                        document.getElementById('blood-pattern-error').classList.add('hidden');
+                        
+                        if (document.getElementById('intermittent-blood-color').value === '') {
+                            alert('Pilih warna darah terlebih dahulu');
+                            return;
+                        }
+                    }
+                    
+                    if (womanStatusVal === 'mutadah' && mutadahTypeVal === 'mumayyizah') {
+                        if (document.getElementById('has-two-types').value === 'yes') {
+                            if (document.getElementById('strong-days').value === '' || 
+                                document.getElementById('strong-blood-color').value === '' || 
+                                document.getElementById('weak-blood-color').value === '') {
+                                alert('Lengkapi detail darah kuat dan lemah terlebih dahulu');
+                                return;
+                            }
+                        }
+                    }
+                    
+                    if (womanStatusVal === 'mutadah' && mutadahTypeVal === 'mutahayyiroh') {
+                        if (document.getElementById('remember-habit').value === 'partial' && 
+                            (document.getElementById('habit-days').value === '' || 
+                             document.getElementById('habit-clean-days').value === '')) {
+                            alert('Lengkapi kebiasaan haid yang Anda ingat terlebih dahulu');
+                            return;
+                        }
+                    }
+                }
+                
+                // Prepare data for analysis
+                const continuousBlood = {
+                    color: document.getElementById('blood-color').value,
+                    thick: document.getElementById('thick').checked,
+                    smelly: document.getElementById('smelly').checked
+                };
+                
+                const intermittentBlood = {
+                    pattern: document.getElementById('blood-pattern').value,
+                    color: document.getElementById('intermittent-blood-color').value,
+                    thick: document.getElementById('intermittent-thick').checked,
+                    smelly: document.getElementById('intermittent-smelly').checked
+                };
+                
+                const mumayyizahDetails = {
+                    hasTwoTypes: document.getElementById('has-two-types').value === 'yes',
+                    strongDays: parseInt(document.getElementById('strong-days').value) || 0,
+                    strongBlood: {
+                        color: document.getElementById('strong-blood-color').value,
+                        thick: document.getElementById('strong-thick').checked,
+                        smelly: document.getElementById('strong-smelly').checked
+                    },
+                    weakBlood: {
+                        color: document.getElementById('weak-blood-color').value,
+                        thick: document.getElementById('weak-thick').checked,
+                        smelly: document.getElementById('weak-smelly').checked
+                    }
+                };
+                
+                const mutahayyirohDetails = {
+                    rememberHabit: document.getElementById('remember-habit').value,
+                    habitDays: parseInt(document.getElementById('habit-days').value) || 0,
+                    habitCleanDays: parseInt(document.getElementById('habit-clean-days').value) || 0
+                };
+                
+                const nifasDetails = {
+                    previousNifas: document.getElementById('previous-nifas').value
+                };
+                
+                const istihadhahDetails = {
+                    threeMonthPattern: document.getElementById('three-month-pattern').value
+                };
+                
+                // Perform analysis
+                const result = analyzeBloodStatus(
+                    caseTypeVal,
+                    womanStatusVal,
+                    mutadahTypeVal,
+                    bloodTypeVal,
+                    daysCount,
+                    continuousBlood,
+                    intermittentBlood,
+                    mumayyizahDetails,
+                    mutahayyirohDetails,
+                    nifasDetails,
+                    istihadhahDetails
+                );
+                
+                // Display results
+                displayResults(result, caseTypeVal);
+                
+                // Go to result tab
+                document.querySelector('.tab[data-tab="result"]').click();
+            });
+            
+            // Analysis function
+            function analyzeBloodStatus(caseType, womanStatus, mutadahType, bloodType, daysCount, 
+                                      continuousBlood, intermittentBlood, 
+                                      mumayyizahDetails, mutahayyirohDetails,
+                                      nifasDetails, istihadhahDetails) {
+                let result = {
+                    status: '',
+                    description: '',
+                    bloodDays: [],
+                    prayerObligation: '',
+                    prohibitions: ''
+                };
+                
+                // Helper function to determine blood strength
+                function getBloodStrength(color, thick, smelly) {
+                    // Blood strength hierarchy based on color
+                    const colorStrength = {
+                        'black': 5,
+                        'red': 4,
+                        'red-yellow': 3,
+                        'yellow': 2,
+                        'cloudy': 1,
+                        'unknown': 0
+                    };
+                    
+                    let strength = colorStrength[color] || 0;
+                    
+                    // Add points for thickness and smell
+                    if (thick) strength += 1;
+                    if (smelly) strength += 1;
+                    
+                    return strength;
+                }
+                
+                // Nifas cases
+                if (caseType === 'nifas') {
+                    if (daysCount > 60) {
+                        result.status = 'Nifas Melebihi Batas';
+                        result.description = `60 hari pertama dihukumi nifas, ${daysCount-60} hari berikutnya istihadhah`;
+                        result.bloodDays = Array(60).fill('nifas')
+                                    .concat(Array(daysCount-60).fill('istihadah'));
+                        
+                        result.prayerObligation = 'Wajib mandi setelah darah berhenti atau setelah 60 hari. Shalat yang ditinggalkan selama hari-hari istihadhah wajib diqadha.';
+                    } else {
+                        result.status = 'Nifas Normal';
+                        result.description = `Seluruh hari (${daysCount} hari) dihukumi nifas karena tidak melebihi 60 hari.`;
+                        result.bloodDays = Array(daysCount).fill('nifas');
+                    }
+                    
+                    result.prohibitions = `
+                        <p><strong>Hal-hal yang diharamkan selama nifas:</strong></p>
+                        <ul>
+                            <li>Semua larangan yang berlaku untuk haid juga berlaku untuk nifas</li>
+                            <li>Masa nifas minimal 1 hari, maksimal 60 hari</li>
+                            <li>Jika darah berhenti sebelum 60 hari, wajib mandi dan mulai shalat</li>
+                            <li>Jika darah terus keluar setelah 60 hari, dihukumi istihadhah</li>
+                        </ul>
+                    `;
+                }
+                // Istihadhah cases
+                else if (caseType === 'istihadhah') {
+                    // Logika untuk istihadhah kompleks
+                    if (mutadahType === 'mutahayyiroh') {
+                        result.prayerObligation = `
+                            <p>Wajib melakukan puasa qadha selama 2 hari setelah Ramadan 
+                            dengan pola khusus (3 hari puasa, 12 hari istirahat, 3 hari puasa)</p>
+                        `;
+                    }
+
+                    // Penanganan darah terputus dengan selang >15 hari
+                    if (bloodType === 'intermittent' && intermittentBlood.pattern.includes(',')) {
+                        const intervals = intermittentBlood.pattern.split(',').map(Number);
+                        let haidDays = 0;
+                        let isBlood = true;
+                        
+                        intervals.forEach((days) => {
+                            if (isBlood) { // Hari darah
+                                const maxHaidDays = Math.min(days, 15 - haidDays);
+                                haidDays += maxHaidDays;
+                                
+                                result.bloodDays.push(...Array(maxHaidDays).fill('haid'));
+                                if (days > maxHaidDays) {
+                                    result.bloodDays.push(...Array(days - maxHaidDays).fill('istihadah'));
+                                }
+                            } else { // Hari suci
+                                result.bloodDays.push(...Array(days).fill('suci'));
+                            }
+                            isBlood = !isBlood;
+                        });
+                        
+                        result.status = 'Istihadhah Kompleks';
+                        result.description = `Darah terputus dengan pola tertentu. ${haidDays} hari dihukumi haid dan ${daysCount - haidDays} hari dihukumi istihadhah/suci.`;
+                    } else {
+                        // Default istihadhah analysis
+                        result = analyzeBloodStatus(
+                            'haid', // Reuse haid analysis
+                            womanStatus,
+                            mutadahType,
+                            bloodType,
+                            daysCount,
+                            continuousBlood,
+                            intermittentBlood,
+                            mumayyizahDetails,
+                            mutahayyirohDetails,
+                            nifasDetails,
+                            istihadhahDetails
+                        );
+                        
+                        // Adjust status for istihadhah case
+                        result.status = result.status.replace('Haid', 'Istihadhah');
+                    }
+                }
+                // Haid cases (default)
+                else {
+                    // Mubtadi'ah cases
+                    if (womanStatus === 'mubtadiah') {
+                        if (bloodType === 'continuous') {
+                            // Mubtadi'ah Ghoiru Mumayyizah (continuous same blood)
+                            result.status = 'Mubtadi\'ah Ghoiru Mumayyizah';
+                            
+                            if (daysCount <= 15) {
+                                // All days are haid
+                                result.description = 'Seluruh hari (' + daysCount + ' hari) dihukumi darah haid karena tidak melebihi 15 hari.';
+                                result.bloodDays = Array(daysCount).fill('haid');
+                            } else {
+                                // First day is haid, rest is istihadah
+                                result.description = '1 hari 1 malam pertama dihukumi darah haid, dan ' + (daysCount - 1) + ' hari berikutnya dihukumi istihadhah karena melebihi 15 hari dan darah tidak dapat dibedakan antara kuat dan lemah.';
+                                result.bloodDays = Array(daysCount).fill('istihadah');
+                                result.bloodDays[0] = 'haid';
+                                
+                                // For the first month, she must wait 15 days before ghusl
+                                result.prayerObligation = 'Untuk bulan pertama, mandi janabahnya harus menunggu 15 hari. Shalat yang ditinggalkan selama 14 hari (mulai hari kedua sampai 15) wajib diqadha. Untuk bulan selanjutnya (bila darah keluar berbulan-bulan), mandinya tidak usah menunggu 15 hari, namun pada saat keluarnya darah sudah genap sehari semalam.';
+                            }
+                        } else if (bloodType === 'intermittent') {
+                            // Parse the pattern
+                            const pattern = intermittentBlood.pattern.split(',').map(num => parseInt(num.trim()));
+                            
+                            // Create blood days array
+                            let bloodDays = [];
+                            let isBlood = true; // Start with blood
+                            
+                            for (let i = 0; i < pattern.length; i++) {
+                                const days = pattern[i];
+                                const status = isBlood ? 'haid' : 'suci';
+                                bloodDays = bloodDays.concat(Array(days).fill(status));
+                                isBlood = !isBlood; // Toggle between blood and no blood
+                            }
+                            
+                            // Check total blood days
+                            const totalBloodDays = bloodDays.filter(day => day === 'haid').length;
+                            
+                            if (totalBloodDays <= 15) {
+                                // All blood days are haid
+                                result.status = 'Mubtadi\'ah dengan Darah Terputus';
+                                result.description = 'Seluruh hari darah (' + totalBloodDays + ' hari) dihukumi darah haid karena tidak melebihi 15 hari. Hari-hari tidak keluar darah dihukumi suci.';
+                                result.bloodDays = bloodDays;
+                            } else {
+                                // First blood day is haid, rest is istihadah
+                                result.status = 'Mubtadi\'ah Ghoiru Mumayyizah dengan Darah Terputus';
+                                result.description = '1 hari 1 malam pertama darah dihukumi darah haid, dan ' + (totalBloodDays - 1) + ' hari darah berikutnya dihukumi istihadhah karena total darah melebihi 15 hari dan darah tidak dapat dibedakan antara kuat dan lemah. Hari-hari tidak keluar darah dihukumi suci.';
+                                
+                                // Mark only the first blood day as haid
+                                let firstBloodFound = false;
+                                result.bloodDays = bloodDays.map(day => {
+                                    if (day === 'haid') {
+                                        if (!firstBloodFound) {
+                                            firstBloodFound = true;
+                                            return 'haid';
+                                        } else {
+                                            return 'istihadah';
+                                        }
+                                    }
+                                    return day;
+                                });
+                                
+                                // For the first month, she must wait 15 days before ghusl
+                                result.prayerObligation = 'Untuk bulan pertama, mandi janabahnya harus menunggu 15 hari. Shalat yang ditinggalkan selama hari-hari istihadhah wajib diqadha. Untuk bulan selanjutnya (bila darah keluar berbulan-bulan), mandinya tidak usah menunggu 15 hari, namun pada saat keluarnya darah sudah genap sehari semalam.';
+                            }
+                        }
+                    }
+                    // Mu'tadah cases
+                    else if (womanStatus === 'mutadah') {
+                        if (mutadahType === 'mumayyizah') {
+                            if (mumayyizahDetails.hasTwoTypes) {
+                                // Mu'tadah Mumayyizah with two blood types
+                                result.status = 'Mu\'tadah Mumayyizah (Dapat Membedakan Darah Kuat dan Lemah)';
+                                
+                                const strongDays = mumayyizahDetails.strongDays;
+                                const weakDays = daysCount - strongDays;
+                                
+                                // Check if strong blood meets the 3 conditions:
+                                // 1. At least 1 day
+                                // 2. Not more than 15 days
+                                // 3. Weak blood is at least 15 days between strong bloods
+                                const strongStrength = getBloodStrength(
+                                    mumayyizahDetails.strongBlood.color,
+                                    mumayyizahDetails.strongBlood.thick,
+                                    mumayyizahDetails.strongBlood.smelly
+                                );
+                                
+                                const weakStrength = getBloodStrength(
+                                    mumayyizahDetails.weakBlood.color,
+                                    mumayyizahDetails.weakBlood.thick,
+                                    mumayyizahDetails.weakBlood.smelly
+                                );
+                                
+                                if (strongDays >= 1 && strongDays <= 15 && weakDays >= 15) {
+                                    // Conditions met - strong blood is haid, weak is istihadah
+                                    result.description = strongDays + ' hari darah kuat dihukumi haid dan ' + weakDays + ' hari darah lemah dihukumi istihadhah karena memenuhi 3 syarat: (1) Darah kuat minimal 1 hari, (2) Tidak lebih dari 15 hari, (3) Darah lemah minimal 15 hari.';
+                                    
+                                    // Create blood days array
+                                    result.bloodDays = Array(strongDays).fill('haid')
+                                        .concat(Array(weakDays).fill('istihadah'));
+                                    
+                                    result.prayerObligation = 'Wajib mandi ketika darah berubah dari kuat ke lemah. Shalat yang ditinggalkan selama hari-hari istihadhah wajib diqadha.';
+                                } else {
+                                    // Conditions not met - treat as non-mumayyizah
+                                    result.status = 'Mu\'tadah Ghoiru Mumayyizah';
+                                    
+                                    if (strongDays < 1) {
+                                        result.description = 'Darah kuat kurang dari 1 hari, sehingga tidak memenuhi syarat sebagai darah haid. Seluruh hari dihukumi istihadhah.';
+                                        result.bloodDays = Array(daysCount).fill('istihadah');
+                                    } else if (strongDays > 15) {
+                                        result.description = 'Darah kuat lebih dari 15 hari, sehingga tidak memenuhi syarat sebagai darah haid. Seluruh hari dihukumi istihadhah.';
+                                        result.bloodDays = Array(daysCount).fill('istihadah');
+                                    } else if (weakDays < 15) {
+                                        result.description = 'Darah lemah kurang dari 15 hari, sehingga tidak memenuhi syarat sebagai pemisah antara darah haid. Seluruh hari dihukumi istihadhah.';
+                                        result.bloodDays = Array(daysCount).fill('istihadah');
+                                    }
+                                    
+                                    result.prayerObligation = 'Wajib mandi setelah darah berhenti atau setelah 15 hari (untuk bulan pertama). Shalat yang ditinggalkan selama hari-hari istihadhah wajib diqadha.';
+                                }
+                            } else {
+                                // Mu'tadah Mumayyizah with one blood type
+                                if (bloodType === 'continuous') {
+                                    const bloodStrength = getBloodStrength(
+                                        continuousBlood.color,
+                                        continuousBlood.thick,
+                                        continuousBlood.smelly
+                                    );
+                                    
+                                    // Considered as strong blood if color is black/red and thick/smelly
+                                    if (bloodStrength >= 5) {
+                                        if (daysCount <= 15) {
+                                            result.status = 'Mu\'tadah Mumayyizah (Darah Kuat)';
+                                            result.description = 'Seluruh hari (' + daysCount + ' hari) dihukumi darah haid karena darah kuat dan tidak melebihi 15 hari.';
+                                            result.bloodDays = Array(daysCount).fill('haid');
+                                        } else {
+                                            result.status = 'Mu\'tadah Mumayyizah (Darah Kuat Melebihi 15 Hari)';
+                                            result.description = '15 hari pertama dihukumi darah haid dan ' + (daysCount - 15) + ' hari berikutnya dihukumi istihadhah karena melebihi batas maksimal haid.';
+                                            result.bloodDays = Array(15).fill('haid')
+                                                .concat(Array(daysCount - 15).fill('istihadah'));
+                                        }
+                                    } else {
+                                        // Weak blood - all istihadah
+                                        result.status = 'Mu\'tadah Mumayyizah (Darah Lemah)';
+                                        result.description = 'Seluruh hari (' + daysCount + ' hari) dihukumi istihadhah karena darah lemah.';
+                                        result.bloodDays = Array(daysCount).fill('istihadah');
+                                    }
+                                } else if (bloodType === 'intermittent') {
+                                    // Parse the pattern
+                                    const pattern = intermittentBlood.pattern.split(',').map(num => parseInt(num.trim()));
+                                    
+                                    // Create blood days array
+                                    let bloodDays = [];
+                                    let isBlood = true;
+                                    
+                                    for (let i = 0; i < pattern.length; i++) {
+                                        const days = pattern[i];
+                                        const status = isBlood ? 
+                                            (getBloodStrength(
+                                                intermittentBlood.color,
+                                                intermittentBlood.thick,
+                                                intermittentBlood.smelly
+                                            ) >= 5 ? 'haid' : 'istihadah') : 
+                                            'suci';
+                                        bloodDays = bloodDays.concat(Array(days).fill(status));
+                                        isBlood = !isBlood;
+                                    }
+                                    
+                                    // Count haid days
+                                    const haidDays = bloodDays.filter(day => day === 'haid').length;
+                                    
+                                    if (haidDays > 0) {
+                                        if (haidDays <= 15) {
+                                            result.status = 'Mu\'tadah Mumayyizah dengan Darah Terputus';
+                                            result.description = haidDays + ' hari darah kuat dihukumi haid dan hari-hari lainnya dihukumi sesuai statusnya (istihadhah atau suci).';
+                                            result.bloodDays = bloodDays;
+                                        } else {
+                                            result.status = 'Mu\'tadah Mumayyizah dengan Darah Terputus Melebihi 15 Hari';
+                                            result.description = '15 hari darah kuat pertama dihukumi haid dan ' + (haidDays - 15) + ' hari darah kuat berikutnya dihukumi istihadhah karena melebihi batas maksimal haid. Hari-hari lainnya dihukumi sesuai statusnya (istihadhah atau suci).';
+                                            
+                                            // Mark only first 15 haid days as haid
+                                            let haidCount = 0;
+                                            result.bloodDays = bloodDays.map(day => {
+                                                if (day === 'haid') {
+                                                    haidCount++;
+                                                    return haidCount <= 15 ? 'haid' : 'istihadah';
+                                                }
+                                                return day;
+                                            });
+                                        }
+                                    } else {
+                                        result.status = 'Mu\'tadah Mumayyizah dengan Darah Lemah Terputus';
+                                        result.description = 'Seluruh hari darah dihukumi istihadhah karena darah lemah. Hari-hari tidak keluar darah dihukumi suci.';
+                                        result.bloodDays = bloodDays;
+                                    }
+                                }
+                            }
+                        } else if (mutadahType === 'mutahayyiroh') {
+                            // Mu'tadah Mutahayyiroh
+                            result.status = 'Mu\'tadah Mutahayyiroh';
+                            
+                            if (mutahayyirohDetails.rememberHabit === 'partial') {
+                                const habitDays = mutahayyirohDetails.habitDays;
+                                const habitCleanDays = mutahayyirohDetails.habitCleanDays;
+                                
+                                if (habitDays > 0 && habitCleanDays >= 15) {
+                                    result.description = 'Anda mengingat kebiasaan haid sebelumnya yaitu ' + habitDays + ' hari haid dan ' + habitCleanDays + ' hari suci. Maka darah yang keluar selama ' + habitDays + ' hari dihukumi haid dan selebihnya dihukumi istihadhah.';
+                                    
+                                    const haidDays = Math.min(habitDays, daysCount);
+                                    result.bloodDays = Array(haidDays).fill('haid')
+                                        .concat(Array(daysCount - haidDays).fill('istihadah'));
+                                    
+                                    result.prayerObligation = 'Wajib mandi setelah darah berhenti atau setelah ' + habitDays + ' hari (sesuai kebiasaan). Shalat yang ditinggalkan selama hari-hari istihadhah wajib diqadha.';
+                                } else {
+                                    result.description = 'Kebiasaan haid yang Anda ingat tidak valid (minimal 15 hari suci). Maka 1 hari 1 malam pertama dihukumi haid dan selebihnya dihukumi istihadhah.';
+                                    
+                                    result.bloodDays = Array(daysCount).fill('istihadah');
+                                    if (daysCount > 0) {
+                                        result.bloodDays[0] = 'haid';
+                                    }
+                                    
+                                    result.prayerObligation = 'Wajib mandi setelah darah berhenti atau setelah 15 hari (untuk bulan pertama). Shalat yang ditinggalkan selama hari-hari istihadhah wajib diqadha.';
+                                }
+                            } else {
+                                result.description = 'Anda tidak ingat kebiasaan haid sebelumnya. Maka 1 hari 1 malam pertama dihukumi haid dan selebihnya dihukumi istihadhah.';
+                                
+                                result.bloodDays = Array(daysCount).fill('istihadah');
+                                if (daysCount > 0) {
+                                    result.bloodDays[0] = 'haid';
+                                }
+                                
+                                result.prayerObligation = 'Wajib mandi setelah darah berhenti atau setelah 15 hari (untuk bulan pertama). Shalat yang ditinggalkan selama hari-hari istihadhah wajib diqadha.';
+                            }
+                        }
+                    }
+                }
+                
+                // Add prohibitions if not already set (for nifas/istihadhah cases)
+                if (!result.prohibitions) {
+                    result.prohibitions = `
+                        <p><strong>Hal-hal yang diharamkan selama haid:</strong></p>
+                        <ul>
+                            <li>Shalat (wajib maupun sunnah)</li>
+                            <li>Sujud syukur dan tilawah</li>
+                            <li>Puasa (wajib diqadha setelah suci)</li>
+                            <li>Thawaf (wajib maupun sunnah)</li>
+                            <li>Membaca Al-Qur'an (kecuali dalam hati atau tanpa niat membaca Qur'an)</li>
+                            <li>Menyentuh dan membawa mushaf Al-Qur'an</li>
+                            <li>Berdiam diri atau lewat di masjid (kecuali darurat)</li>
+                            <li>Dicerai oleh suami</li>
+                            <li>Bersetubuh atau bersentuhan kulit antara pusar dan lutut tanpa penghalang</li>
+                        </ul>
+                        <p><strong>Hal-hal yang diharamkan selama istihadhah:</strong></p>
+                        <ul>
+                            <li>Tidak ada larangan khusus, namun wajib mandi dan shalat seperti biasa</li>
+                        </ul>
+                    `;
+                }
+                
+                return result;
+            }
+            
+            // Display results
+            function displayResults(result, caseType) {
+                const resultContent = document.getElementById('result-content');
+                const bloodVisualization = document.getElementById('blood-visualization');
+                const bloodDaysContainer = document.getElementById('blood-days-container');
+                const prayerObligation = document.getElementById('prayer-obligation');
+                const prayerContent = document.getElementById('prayer-content');
+                const prohibitions = document.getElementById('prohibitions');
+                const prohibitionsContent = document.getElementById('prohibitions-content');
+                const nifasResult = document.getElementById('nifas-result');
+                
+                // Clear previous results
+                resultContent.innerHTML = '';
+                bloodDaysContainer.innerHTML = '';
+                
+                // Display status and description
+                resultContent.innerHTML = `
+                    <h3>Status: ${result.status}</h3>
+                    <p>${result.description}</p>
+                `;
+                
+                // Show/hide nifas info
+                if (caseType === 'nifas') {
+                    nifasResult.classList.remove('hidden');
+                } else {
+                    nifasResult.classList.add('hidden');
+                }
+                
+                // Display blood days visualization if available
+                if (result.bloodDays && result.bloodDays.length > 0) {
+                    bloodVisualization.classList.remove('hidden');
+                    
+                    result.bloodDays.forEach((day, index) => {
+                        const dayBox = document.createElement('div');
+                        dayBox.className = `day-box ${day}`;
+                        dayBox.textContent = index + 1;
+                        dayBox.title = `Hari ${index + 1}: ${getDayStatusName(day)}`;
+                        bloodDaysContainer.appendChild(dayBox);
+                    });
+                } else {
+                    bloodVisualization.classList.add('hidden');
+                }
+                
+                // Display prayer obligation if available
+                if (result.prayerObligation) {
+                    prayerObligation.classList.remove('hidden');
+                    prayerContent.innerHTML = `<p>${result.prayerObligation}</p>`;
+                } else {
+                    prayerObligation.classList.add('hidden');
+                }
+                
+                // Display prohibitions
+                prohibitions.classList.remove('hidden');
+                prohibitionsContent.innerHTML = result.prohibitions;
+            }
+            
+            // Helper function to get day status name
+            function getDayStatusName(status) {
+                switch (status) {
+                    case 'haid': return 'Haid';
+                    case 'istihadah': return 'Istihadhah';
+                    case 'nifas': return 'Nifas';
+                    case 'suci': return 'Suci';
+                    default: return status;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
