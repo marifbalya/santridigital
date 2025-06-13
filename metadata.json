@@ -1,0 +1,6 @@
+{
+  "name": "Live Code Editor",
+  "description": "A simple web application to edit HTML, CSS, and JavaScript code and see the live preview. Code is rendered in an iframe without using external frameworks for the preview itself.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
